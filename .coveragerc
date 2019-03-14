@@ -1,0 +1,3 @@
+[run]
+source = carusel
+omit = carusel/test*
