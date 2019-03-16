@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Text, Boolean, Date
+from sqlalchemy import Column, ForeignKey, Integer, Text, Date, SmallInteger
 from sqlalchemy.orm import relationship
 from .meta import Base
 
@@ -11,7 +11,7 @@ class Banner(Base):
     url_link = Column(Text)
     image = Column(Text)
     position = Column(Integer)
-    status = Column(Boolean, unique=False, default=False, create_constraint=False)
+    status = Column(SmallInteger, unique=False, default=0)
     created = Column(Date)
 
     creator_id = Column(ForeignKey('users.id'), nullable=False)

@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from pyramid.view import view_config
 from pyramid.response import Response
 
@@ -6,14 +7,16 @@ from sqlalchemy.exc import DBAPIError
 from .. import models
 
 
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-def my_view(request):
+@view_config(route_name='home', renderer='../templates/index.jinja2')
+def index(request):
     try:
-        query = request.dbsession.query(models.MyModel)
-        one = query.filter(models.MyModel.name == 'one').first()
+        query = request.dbsession.query(models.Banner)
+        status = query.filter(models.Banner.status == 1).all()
+        print(10*'*')
+        print(status)
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'testproj'}
+    return {}
 
 
 db_err_msg = """\
