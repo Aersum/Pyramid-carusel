@@ -29,7 +29,8 @@ def setup_models(dbsession):
         title_name='Sample2',
         position=2,
         status=1,
-        url_link='/static/sample.png',
+        url_link='/static',
+        image='sample.png',
         creator=editor
         )
     dbsession.add(banner2)

@@ -11,12 +11,10 @@ from .. import models
 def index(request):
     try:
         query = request.dbsession.query(models.Banner)
-        status = query.filter(models.Banner.status == 1).all()
-        print(10*'*')
-        print(status)
+        status_true = query.filter(models.Banner.status == 1).all()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {}
+    return dict(banners=status_true)
 
 
 db_err_msg = """\

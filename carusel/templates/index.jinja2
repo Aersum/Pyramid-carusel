@@ -1,9 +1,35 @@
 {% extends 'layout.jinja2' %}
 {% block title %}Carusel{% endblock %}
+{% block headers %}
+<link rel="stylesheet" href="{{request.static_url('carusel:static/flexslider/flexslider.css')}}" type="text/css">
+
+{% endblock %}
 {% block content %}
 <div class="container">
-    <p>
-        it's working!!!
-    </p>
+    <div class="row">
+        <div class="col-md-6">
+        <div class="flexslider">
+            <ul class="slides">
+            {% for banner in banners %}
+                <li>
+                <img class="img-fluid" src="{{banner.url_link}}/{{banner.image}}" alt="{{banner.title_name}}"/>
+                </li>
+            {% endfor %}
+                <!-- <li>
+                <img src="https://cdn.images.express.co.uk/img/dynamic/151/590x/great-pyramid-996800.jpg" />
+                </li> -->
+            </ul>
+        </div>
+        </div>
+    </div>
+    
 </div>
+{% endblock %}
+{% block footer %}
+<script src="{{request.static_url('carusel:static/flexslider/jquery.flexslider.js')}}"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.flexslider').flexslider();
+    });
+  </script>
 {% endblock %}
