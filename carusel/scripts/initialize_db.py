@@ -20,19 +20,22 @@ def setup_models(dbsession):
         title_name='Sample1',
         position=1,
         status=1,
-        url_link='/static/sample.png',
+        url_link='/static/banners',
+        image='sample.png',
         creator=editor
         )
+    banner1.set_datetime()
     dbsession.add(banner1)
 
     banner2 = models.Banner(
         title_name='Sample2',
         position=2,
         status=1,
-        url_link='/static',
-        image='sample.png',
+        url_link='/static/banners',
+        image='sample2.png',
         creator=editor
         )
+    banner2.set_datetime()
     dbsession.add(banner2)
 
 

@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="{{ request.route_url('home') }}">
             Home <span class="sr-only">(current)</span>
           </a>
         </li>
@@ -16,7 +16,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
           <li>
-              <a href="" class="nav-link">
+              <a href="{{ request.route_url('login') }}" class="nav-link">
                 <span class="fa fa-sign-in"></span>Sign In
               </a>
           </li>

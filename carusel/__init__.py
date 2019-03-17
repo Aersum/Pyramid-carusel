@@ -7,6 +7,7 @@ def main(global_config, **settings):
     with Configurator(settings=settings) as config:
         config.include('.models')
         config.include('pyramid_jinja2')
+        config.add_static_view('static_deform', 'deform:static')
         config.include('.routes')
         config.scan()
     return config.make_wsgi_app()

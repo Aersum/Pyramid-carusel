@@ -1,6 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, Text, Date, SmallInteger
+from sqlalchemy import Column, ForeignKey, Integer, Text, SmallInteger, DateTime
 from sqlalchemy.orm import relationship
 from .meta import Base
+from datetime import datetime
 
 
 class Banner(Base):
@@ -12,7 +13,10 @@ class Banner(Base):
     image = Column(Text)
     position = Column(Integer)
     status = Column(SmallInteger, unique=False, default=0)
-    created = Column(Date)
+    created = Column(DateTime)
 
     creator_id = Column(ForeignKey('users.id'), nullable=False)
     creator = relationship('User', backref='created_banners')
+
+    def set_datetime(self):
+        self.created = datetime.now()
