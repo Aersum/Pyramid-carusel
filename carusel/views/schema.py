@@ -1,21 +1,24 @@
 import colander
 import deform
-from deform.interfaces import FileUploadTempStore
 
 
-tmpstore = FileUploadTempStore()
+class Store(dict):
+    def preview_url(self, name):
+        return ""
+
+store = Store()
 
 
-class BannerSchema(deform.schema.CSRFSchema):
+class BannerSchema(colander.MappingSchema):
     title_name = colander.SchemaNode(
         colander.String(),
-        validator=colander.Length(min=3),
-        title="Banner Name"
+        title="Banner Name",
         )
     position = colander.SchemaNode(
         colander.Integer(strict=True),
-        widget=deform.widget.TextInputWidget(size=5),
-        title='Display position'
+        widget=deform.widget.TextInputWidget(),
+        title='Display position',
+        missing=colander.null
         )
     status = colander.SchemaNode(
         colander.Boolean(),
@@ -24,6 +27,18 @@ class BannerSchema(deform.schema.CSRFSchema):
         )
     image_file = colander.SchemaNode(
         deform.FileData(),
-        widget=deform.widget.FileUploadWidget(tmpstore),
+        widget=deform.widget.FileUploadWidget(store),
         title='Upload'
         )
+
+
+class LoginSchema(colander.Schema):
+    login = colander.SchemaNode(
+        colander.Str(),
+        validator=colander.Length(min=5, max=100),
+    )
+    password = colander.SchemaNode(
+        colander.String(),
+        validator=colander.Length(min=5, max=100),
+        widget=deform.widget.PasswordWidget(size=20),
+        description='Enter a password')

@@ -1,0 +1,14 @@
+{% extends 'layout.jinja2' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <p>{{message}}</p>
+            {{form|safe}}
+        </div>
+    </div>
+</div>
+{% endblock content %}

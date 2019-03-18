@@ -10,16 +10,30 @@
             Home <span class="sr-only">(current)</span>
           </a>
         </li>
+        {% if request.user is none %}
         <li class="nav-item">
           <a class="nav-link disabled" href="">Banners</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{request.route_url('banner')}}">Banners</a>
+        </li>
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
+          {% if request.user is none %}
           <li>
               <a href="{{ request.route_url('login') }}" class="nav-link">
                 <span class="fa fa-sign-in"></span>Sign In
               </a>
           </li>
+          {% else %}
+          <li>
+              <a href="{{ request.route_url('logout') }}" class="nav-link">
+                <span class="fa fa-sign-out"></span>Sign Out
+              </a>
+          </li>
+          {% endif %}
             <!-- <li>
                 <a href="" class="nav-link">
                     <span class="fa fa-user"></span>Sign Up

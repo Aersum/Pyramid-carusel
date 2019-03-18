@@ -1,8 +1,9 @@
 from os import path
-from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPForbidden
 from pyramid.view import view_config
 from pyramid.response import Response
 import deform
+import imghdr
 
 from sqlalchemy.exc import DBAPIError
 
@@ -31,8 +32,36 @@ def index(request):
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')
 def add_banner(request):
     schema = BannerSchema()
-    form = deform.Form(schema, buttons=('save', )).render()
-    return dict(form=form)
+    form = deform.Form(schema, buttons=('save', ))
+    if request.method == 'POST':
+        if 'save' in request.POST:
+            try:
+                controls = request.params.items()
+                params = form.validate(controls)
+            except deform.exception.ValidationFailure as e:
+                form = e
+                return dict(form=form.render())
+            f = params['image_file']
+            upload_filename = f['filename']
+            image_file = f['fp']
+            print(request.params.get('status'))
+            # Now we test for a valid image upload
+            image_test = imghdr.what(image_file)
+            if image_test is None:
+                error_message = "I'm sorry, the image file seems to be invalid"
+                return {'form': form.render(), 'values': False, 'error_message': error_message}
+            # Save image file with unique name
+            filename = imgprocess.get_unique_file_name(upload_filename)
+            output_file = open(path.join(banners_dir, filename), 'wb')
+            image_file.seek(0)
+            while 1:
+                data = image_file.read(2 << 16)
+                if not data:
+                    break
+                output_file.write(data)
+            output_file.close()
+
+    return dict(form=form.render())
 
 
 db_err_msg = """\
