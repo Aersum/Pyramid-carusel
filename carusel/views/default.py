@@ -26,7 +26,8 @@ def index(request):
     for banner in status_true:
         absolute_path = path.join(banners_dir, banner.image)
         imgprocess.get_resized_img(absolute_path)
-    return dict(banners=status_true)
+    messages = request.session.pop_flash()
+    return dict(banners=status_true, messages=messages)
 
 
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')

@@ -37,6 +37,7 @@ def login(request):
             user = request.dbsession.query(User).filter_by(name=login).first()
             if user is not None and user.check_password(password):
                 headers = remember(request, user.id)
+                request.session.flash('You logged in')
                 return HTTPFound(location=next_url, headers=headers)
             else:
                 message = 'Failed login'
@@ -54,6 +55,7 @@ def login(request):
 def logout(request):
     headers = forget(request)
     next_url = request.route_url('home')
+    request.session.flash('You logged out')
     return HTTPFound(location=next_url, headers=headers)
 
 
