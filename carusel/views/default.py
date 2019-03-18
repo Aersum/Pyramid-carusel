@@ -31,6 +31,9 @@ def index(request):
 
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')
 def add_banner(request):
+    user = request.user
+    if user is None:
+        raise HTTPForbidden
     schema = BannerSchema()
     form = deform.Form(schema, buttons=('save', ))
     if request.method == 'POST':
@@ -44,7 +47,6 @@ def add_banner(request):
             f = params['image_file']
             upload_filename = f['filename']
             image_file = f['fp']
-            print(request.params.get('status'))
             # Now we test for a valid image upload
             image_test = imghdr.what(image_file)
             if image_test is None:
@@ -60,6 +62,25 @@ def add_banner(request):
                     break
                 output_file.write(data)
             output_file.close()
+            # Save data to db
+            if params.get('status') is not None:
+                status = 1
+            else:
+                status = 0
+            print(type(params['position']))
+            banner = models.Banner(
+                title_name=params['title_name'],
+                image=filename,
+                status=status,
+                url_link=request.static_url('carusel:static/banners')
+            )
+            if isinstance(params['position'], int):
+                banner.position = params['position']
+            banner.set_datetime()
+            banner.creator = request.user
+            request.dbsession.add(banner)
+            next_url = request.route_url('view_banner', bannername=params['title_name'])
+            return HTTPFound(location=next_url)
 
     return dict(form=form.render())
 
