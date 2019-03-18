@@ -1,5 +1,6 @@
 import colander
 import deform
+from pyramid_recaptcha import deferred_recaptcha_widget
 
 
 class Store(dict):
@@ -41,4 +42,10 @@ class LoginSchema(colander.Schema):
         colander.String(),
         validator=colander.Length(min=5, max=100),
         widget=deform.widget.PasswordWidget(size=20),
-        description='Enter a password')
+        description='Enter a password'
+        )
+    captcha = colander.SchemaNode(
+        colander.String(),
+        title='Verify you are human',
+        widget=deferred_recaptcha_widget
+        )

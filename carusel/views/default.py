@@ -67,12 +67,11 @@ def add_banner(request):
                 status = 1
             else:
                 status = 0
-            print(type(params['position']))
             banner = models.Banner(
                 title_name=params['title_name'],
                 image=filename,
                 status=status,
-                url_link=request.static_url('carusel:static/banners')
+                url_link=request.static_url('/static/banners')
             )
             if isinstance(params['position'], int):
                 banner.position = params['position']

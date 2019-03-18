@@ -12,6 +12,8 @@ requires = [
     'bcrypt',
     'deform',
     'Pillow',
+    'pyramid_recaptcha',
+    'requests',
     'plaster_pastedeploy',
     'pyramid',
     'pyramid_jinja2',

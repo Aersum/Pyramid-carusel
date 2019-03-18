@@ -6,7 +6,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <p>{{message}}</p>
+            {% if message %}
+            <div class="alert alert-warning alert-dismissible fade show">  
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>Warning!</strong> {{message}}
+            </div>
+            {% endif %}
             {{form|safe}}
         </div>
     </div>
