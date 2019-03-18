@@ -78,12 +78,34 @@ def add_banner(request):
                 banner.position = params['position']
             banner.set_datetime()
             banner.creator = request.user
-            request.dbsession.add(banner)
+            try:
+                request.dbsession.add(banner)
+            except DBAPIError:
+                return Response(db_err_msg, content_type='text/plain', status=500)
             next_url = request.route_url('view_banner', bannername=params['title_name'])
             return HTTPFound(location=next_url)
 
     return dict(form=form.render())
 
+
+@view_config(route_name='view_banner', renderer='../templates/banner_view.jinja2')
+def view_banner(request):
+    user = request.user
+    if user is None:
+        raise HTTPForbidden
+    bannername = request.matchdict['bannername']
+    try:
+        query = request.dbsession.query(models.Banner)
+        banner = query.filter(models.Banner.title_name == bannername).first()
+    except DBAPIError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+    if banner is None:
+        raise HTTPNotFound()
+    # Creating resized  image, if not created yet
+    absolute_path = path.join(banners_dir, banner.image)
+    imgprocess.get_resized_img(absolute_path)
+    edit_url = request.route_url('edit_banner', bannername=banner.title_name)
+    return dict(banner=banner, edit_url=edit_url)
 
 db_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem

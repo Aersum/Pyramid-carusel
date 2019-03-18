@@ -1,0 +1,28 @@
+{% extends 'layout.jinja2' %}
+
+{% block title %}{{banner.title_name}}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{banner.title_name}}</h2>
+        <div class="row">
+            <div class="col-md-6">
+                {% if request.user %}
+                <p>
+                   <img class="img-fluid" src="{{banner.url_link}}/resized/{{banner.image}}" alt="{{banner.title_name}}" width="100%"/>
+                </p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <p>Image Name: {{ banner.image }}</p>
+                <p>Position: {{ banner.position }}</p>
+                <p>Status: {{ banner.status }}</p>
+                <p>
+                    <a class="btn btn-info" role="button" href="{{edit_url}}">
+                        Edit
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
