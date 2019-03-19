@@ -14,8 +14,10 @@ requires = [
     'Pillow',
     'pyramid_recaptcha',
     'pyramid_beaker',
+    'pyramid_pagination',
+    'paginate',
+    'paginate_sqlalchemy'
     'requests',
-    'WebHelpers',
     'plaster_pastedeploy',
     'pyramid',
     'pyramid_jinja2',

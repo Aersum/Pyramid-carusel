@@ -4,15 +4,14 @@ from pyramid.view import view_config
 from pyramid.response import Response
 import deform
 import imghdr
-
 from sqlalchemy.exc import DBAPIError
-
 from .. import models
 from .schema import BannerSchema
 from . import imgprocess
 
 static_dir = path.join(path.abspath(path.dirname(path.dirname(__file__))), 'static')
 banners_dir = path.join(static_dir, 'banners')
+resized_banners_dir = path.join(banners_dir, 'resized')
 
 
 @view_config(route_name='home', renderer='../templates/index.jinja2')
@@ -28,6 +27,19 @@ def index(request):
         imgprocess.get_resized_img(absolute_path)
     messages = request.session.pop_flash()
     return dict(banners=status_true, messages=messages)
+
+
+@view_config(route_name='banner', renderer='../templates/banner_list.jinja2')
+def banner_list(request):
+    user = request.user
+    if user is None:
+        raise HTTPForbidden
+    query = request.dbsession.query(models.Banner)
+    banners = query.all()
+    for banner in banners:
+        absolute_path = path.join(banners_dir, banner.image)
+        imgprocess.get_resized_img(absolute_path)
+    return {'banners': banners, 'resized_banners_dir': resized_banners_dir}
 
 
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')

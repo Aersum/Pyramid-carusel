@@ -7,3 +7,4 @@ def includeme(config):
     config.add_route('add_banner', '/banner/add')
     config.add_route('view_banner', '/banner/{bannername}')
     config.add_route('edit_banner', '/banner/{bannername}/edit')
+    config.add_route('delete_banner', '/banner/{bannername}/delete')

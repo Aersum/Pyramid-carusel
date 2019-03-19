@@ -1,0 +1,29 @@
+{% extends 'layout.jinja2' %}
+{% block title %}Banner list{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Banner list</h2>
+        </div>
+        <div class="col-lg-6">
+            <a href="{{request.route_url('add_banner')}}" class="btn btn-primary ml-auto">Add New Banner</a>
+        </div>
+    </div>
+    <div class="row">
+    {% for banner in banners %}
+    <div class="col-md-4">
+        <p>
+            <img class="img-fluid" src="{{banner.url_link}}/resized/{{banner.image}}" alt="{{banner.title_name}}"/>
+        </p>
+        <h4>{{banner.title_name}}</h4>
+        <p>Position: {{ banner.position }}</p>
+        <p>Status: {{ banner.status }}</p>
+        <p>
+            <a href="{{request.route_url('edit_banner', bannername=banner.title_name)}}">Edit</a>
+        </p>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
