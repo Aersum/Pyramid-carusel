@@ -11,19 +11,40 @@
         </div>
     </div>
     <div class="row">
-    {% for banner in banners %}
-    <div class="col-md-4">
-        <p>
-            <img class="img-fluid" src="{{banner.url_link}}/resized/{{banner.image}}" alt="{{banner.title_name}}"/>
-        </p>
-        <h4>{{banner.title_name}}</h4>
-        <p>Position: {{ banner.position }}</p>
-        <p>Status: {{ banner.status }}</p>
-        <p>
-            <a href="{{request.route_url('edit_banner', bannername=banner.title_name)}}">Edit</a>
-        </p>
-    </div>
-    {% endfor %}
+        {% if paginator.items %}
+            {% for banner in paginator.items %}
+            <div class="col-md-4">
+                <p>
+                    <img class="img-fluid" src="{{banner.url_link}}/resized/{{banner.image}}" alt="{{banner.title_name}}"/>
+                </p>
+                <h4>
+                    <a href="{{request.route_url('view_banner', bannername=banner.title_name)}}">
+                        {{banner.title_name}}
+                    </a>
+                </h4>
+                <p>Position: {{ banner.position }}</p>
+                <p>Status: {{ banner.status }}</p>
+                <p>
+                    <a href="{{request.route_url('edit_banner', bannername=banner.title_name)}}">Edit</a>
+                </p>
+            </div>
+            {% endfor %}
+        <div class="container">
+            <div class="pager">  
+                {{
+                    paginator.pager(format="$link_previous ~4~ $link_next",  
+                    symbol_previous="«",
+                    symbol_next="»",
+                    link_attr={"class": "btn btn-sm"},
+                    curpage_attr={"class": "btn btn-primary btn-sm disabled"},
+                    dotdot_attr={"class": "btn btn-sm disabled"}
+                    )|safe
+                }}  
+            </div> 
+        </div>
+        {% else %}
+            <p>No banner entries found.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

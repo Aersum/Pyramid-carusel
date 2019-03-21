@@ -8,6 +8,7 @@ from sqlalchemy.exc import DBAPIError
 from .. import models
 from .schema import BannerSchema
 from . import imgprocess
+from carusel.pagination import CaruselPaginationService
 
 static_dir = path.join(path.abspath(path.dirname(path.dirname(__file__))), 'static')
 banners_dir = path.join(static_dir, 'banners')
@@ -34,12 +35,9 @@ def banner_list(request):
     user = request.user
     if user is None:
         raise HTTPForbidden
-    query = request.dbsession.query(models.Banner)
-    banners = query.all()
-    for banner in banners:
-        absolute_path = path.join(banners_dir, banner.image)
-        imgprocess.get_resized_img(absolute_path)
-    return {'banners': banners, 'resized_banners_dir': resized_banners_dir}
+    page = int(request.params.get('page', 1))
+    paginator = CaruselPaginationService.get_paginator(request, page)
+    return {'paginator': paginator}
 
 
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')
