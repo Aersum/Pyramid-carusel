@@ -84,7 +84,7 @@ def add_banner(request):
                 title_name=params['title_name'],
                 image=filename,
                 status=status,
-                url_link=request.static_url('/static/banners')
+                url_link='/static/banners'
             )
             if isinstance(params['position'], int):
                 banner.position = params['position']
