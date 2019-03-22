@@ -24,9 +24,6 @@
                 </h4>
                 <p>Position: {{ banner.position }}</p>
                 <p>Status: {{ banner.status }}</p>
-                <p>
-                    <a href="{{request.route_url('edit_banner', bannername=banner.title_name)}}">Edit</a>
-                </p>
             </div>
             {% endfor %}
         <div class="container">

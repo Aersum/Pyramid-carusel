@@ -36,7 +36,11 @@ def banner_list(request):
     if user is None:
         raise HTTPForbidden
     page = int(request.params.get('page', 1))
-    paginator = CaruselPaginationService.get_paginator(request, page)
+    pagination_service = CaruselPaginationService(request)
+    paginator = pagination_service.get_paginator(
+        pagination_service.by_position,
+        page
+        )
     return {'paginator': paginator}
 
 
