@@ -17,7 +17,7 @@ class BannerSchema(colander.MappingSchema):
         )
     position = colander.SchemaNode(
         colander.Integer(strict=True),
-        widget=deform.widget.TextInputWidget(),
+        widget=deform.widget.TextInputWidget(attributes={'type': 'number', 'length': 8}),
         title='Display position',
         missing=colander.null
         )
@@ -49,3 +49,20 @@ class LoginSchema(colander.Schema):
         title='Verify you are human',
         widget=deferred_recaptcha_widget
         )
+
+choices = (
+    ('by_title_name', 'By title name'),
+    ('by_status', 'By Status'),
+    ('by_position', 'By Position'),
+)
+
+
+class SortSchema(colander.Schema):
+    sort = colander.SchemaNode(
+        colander.String(),
+        title='Sort: ',
+        widget=deform.widget.SelectWidget(
+            values=choices,
+            attributes={'onchange': 'this.form.submit()'}
+            )
+    )

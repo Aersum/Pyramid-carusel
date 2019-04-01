@@ -9,6 +9,7 @@
         <div class="col-lg-6">
             <a href="{{request.route_url('add_banner')}}" class="btn btn-primary ml-auto">Add New Banner</a>
         </div>
+        {{form|safe}}
     </div>
     <div class="row">
         {% if paginator.items %}

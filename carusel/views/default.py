@@ -6,7 +6,7 @@ import deform
 import imghdr
 from sqlalchemy.exc import DBAPIError
 from .. import models
-from .schema import BannerSchema
+from .schema import BannerSchema, SortSchema
 from . import imgprocess
 from carusel.pagination import CaruselPaginationService
 
@@ -35,13 +35,21 @@ def banner_list(request):
     user = request.user
     if user is None:
         raise HTTPForbidden
+    schema = SortSchema()
+    form = deform.Form(schema)
+    if request.method == 'POST':
+        request.session['sort'] = request.params.get('sort')
+    session_sort = request.session.get('sort', 'by_title_name')
     page = int(request.params.get('page', 1))
     pagination_service = CaruselPaginationService(request)
-    paginator = pagination_service.get_paginator(
-        pagination_service.by_position,
-        page
-        )
-    return {'paginator': paginator}
+    if session_sort == 'by_title_name':
+        pagination_sorting = pagination_service.by_title_name
+    elif session_sort == 'by_status':
+        pagination_sorting = pagination_service.by_status
+    elif session_sort == 'by_position':
+        pagination_sorting = pagination_service.by_position
+    paginator = pagination_service.get_paginator(pagination_sorting, page)
+    return {'paginator': paginator, 'form': form.render({'sort': session_sort})}
 
 
 @view_config(route_name='add_banner', renderer='../templates/banner_addedit.jinja2')
