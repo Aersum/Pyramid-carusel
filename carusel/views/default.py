@@ -27,6 +27,7 @@ def index(request):
         absolute_path = path.join(banners_dir, banner.image)
         imgprocess.get_resized_img(absolute_path)
     messages = request.session.pop_flash()
+    print("hello")
     return dict(banners=status_true, messages=messages)
 
 
